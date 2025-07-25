@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+:root {
+	--primary-color: #571ff2;
+	--secondary-color: #af4ff3;
+
+	--light-gray-color: #d8d8d8;
+	--medium-gray-color: #868686;
+
+	--shadow-3xl: 0 0px 16px -3px rgba(0, 0, 0, 0.6), 0 0px 16px -2px rgba(0, 0, 0, 0.4);
+	--shadow-2xl: 0 0px 10px 0px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+	--shadow-xl: 0 0px 5px 0px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+}
+
+@theme {
+	--color-primary: var(--primary-color);
+	--color-secondary: var(--secondary-color);
+
+	--color-light-gray: var(--light-gray-color);
+	--color-medium-gray: var(--medium-gray-color);
+
+	--shadow-3xl: var(--shadow-3xl);
+	--shadow-2xl: var(--shadow-2xl);
+	--shadow-xl: var(--shadow-xl);
+}
