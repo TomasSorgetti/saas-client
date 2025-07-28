@@ -14,8 +14,11 @@ export const actions = {
 		const res = await fetch(`${PUBLIC_API_URL}/auth/signin`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ email, password })
+			body: JSON.stringify({ email, password }),
+			credentials: 'include'
 		});
+
+		console.log('Login response: ', res);
 
 		if (!res.ok) {
 			return fail(401, { error: 'Credenciales inválidas' });
