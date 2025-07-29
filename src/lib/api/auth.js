@@ -1,8 +1,9 @@
-import api from './index';
+// lib/api/auth.js
+import { publicApi, authApi } from './index';
 
 export async function login(email, password, remember = false) {
 	try {
-		const response = await api.post('/auth/signin', {
+		const response = await publicApi.post('/auth/signin', {
 			email,
 			password,
 			remember
@@ -15,14 +16,12 @@ export async function login(email, password, remember = false) {
 
 export async function fetchProfile() {
 	try {
-		const response = await api.get('/users/profile');
+		const response = await authApi.get('/users/profile');
 		return response.data;
 	} catch (error) {
 		const status = error.response?.status;
 		const message = error.response?.data?.error || `Error HTTP: ${status}`;
-		if (status === 401) {
-			throw new Error('Sesión inválida. Por favor, inicia sesión nuevamente.');
-		} else if (status === 403) {
+		if (status === 403) {
 			throw new Error(
 				message === 'User not verified'
 					? 'Cuenta no verificada. Verifica tu correo electrónico.'
@@ -37,16 +36,16 @@ export async function fetchProfile() {
 
 export async function logout() {
 	try {
-		const response = await api.post('/auth/logout');
+		const response = await publicApi.post('/auth/logout');
 		return response.data;
 	} catch (error) {
 		throw new Error(error.response?.data?.error || 'Error al cerrar sesión');
 	}
 }
 
-export async function refreshToken() {
+export async function refresh() {
 	try {
-		const response = await api.post('/auth/refresh');
+		const response = await publicApi.post('/auth/refresh');
 		return response.data;
 	} catch (error) {
 		throw new Error(error.response?.data?.error || 'Error al refrescar el token');

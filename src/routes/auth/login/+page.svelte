@@ -1,36 +1,24 @@
 <script>
-    import { goto } from '$app/navigation';
-    import { PUBLIC_API_URL } from '$env/static/public';
-    import FormButton from '$lib/components/buttons/FormButton.svelte';
-    import GoogleButton from '$lib/components/buttons/GoogleButton.svelte';
+  import { goto } from '$app/navigation';
+  import { loginUser } from '$lib/stores/auth'; // Importar loginUser
+  import FormButton from '$lib/components/buttons/FormButton.svelte';
+  import GoogleButton from '$lib/components/buttons/GoogleButton.svelte';
 
-    let email = '';
-    let password = '';
-    let remember = false;
-    let error = null;
+  let email = '';
+  let password = '';
+  let remember = false;
+  let error = null;
 
-    async function handleLogin(event) {
-        event.preventDefault();
-        try {
-            const res = await fetch(`${PUBLIC_API_URL}/auth/signin`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ email, password, remember })
-            });
-            if (!res.ok) {
-                const result = await res.json();
-                throw new Error(result.error || `HTTP error! Status: ${res.status}`);
-            }
-            const result = await res.json();
-            console.log('Login response: ', result);
-            // Redirigir al dashboard
-            goto('/private/dashboard');
-        } catch (err) {
-            error = err.message;
-            console.error("Failed to login", err.message);
-        }
+  async function handleLogin(event) {
+    event.preventDefault();
+    try {
+      await loginUser(email, password, remember);
+      goto('/private/dashboard');
+    } catch (err) {
+      error = err.message;
+      console.error('Error al iniciar sesión:', err.message);
     }
+  }
 </script>
 
 <main class="flex flex-col items-center justify-center h-screen bg-gray-100">
@@ -48,6 +36,7 @@
                 name="email"
                 id="email"
                 placeholder="abc@gmail.com"
+                autocomplete="email"
                 bind:value={email}
                 class="h-[48px] border-1 border-light-gray rounded-md px-2 placeholder:text-medium-gray shadow-xl mb-4"
             />
@@ -59,6 +48,7 @@
                 name="password"
                 id="password"
                 placeholder="********"
+                autocomplete="current-password"
                 bind:value={password}
                 class="h-[48px] border-1 border-light-gray rounded-md px-2 placeholder:text-medium-gray shadow-xl mb-4"
             />
