@@ -1,6 +1,5 @@
 <script>
 	import '../app.css';
-	import Navbar from '$lib/components/Navbar.svelte';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { authStore, fetchUserProfile } from '$lib/stores/auth';
@@ -16,9 +15,7 @@
 		} catch (error) {
 			goto('/auth/login');
 		}
-		} else if (browser) {
-		goto('/auth/login');
-		}
+		} 
 		loading = false;
 	});
 </script>
@@ -28,6 +25,5 @@
 		<p>Cargando...</p>
 	</div>
 {:else}
-	<Navbar />
   	<slot />
 {/if}

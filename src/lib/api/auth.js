@@ -13,6 +13,25 @@ export async function login(email, password, remember = false) {
 		throw new Error(error.response?.data?.error || 'Error al iniciar sesión');
 	}
 }
+export async function register(formData) {
+	try {
+		const response = await publicApi.post('/auth/signup', {
+			email: formData.email,
+			firstName: formData.firstName,
+			lastname: formData.lastname,
+			workshopName: formData.workshopName,
+			phone: formData.phone,
+			address: formData.address,
+			country: formData.country,
+			password: formData.password
+		});
+
+		return response.data;
+	} catch (error) {
+		console.log('Error: ', error);
+		throw new Error(error.response?.data?.error || 'Error al iniciar sesión');
+	}
+}
 
 export async function fetchProfile() {
 	try {
@@ -49,5 +68,33 @@ export async function refresh() {
 		return response.data;
 	} catch (error) {
 		throw new Error(error.response?.data?.error || 'Error al refrescar el token');
+	}
+}
+
+export async function verifyEmail(code, token) {
+	try {
+		const response = await publicApi.post('/auth/verify-email', {
+			verification_token: token,
+			verification_code: code
+		});
+		return response.data;
+	} catch (error) {
+		if (error.response?.data?.details) {
+			throw new Error('Código incorrecto');
+		}
+		throw new Error(error.response?.data?.error || 'Error al verificar el email');
+	}
+}
+
+export async function resendEmailCode(token) {
+	try {
+		const response = await publicApi.post('/auth/resend-code', {
+			verification_token: token
+		});
+		console.log('Fetch ', response);
+
+		return response.data;
+	} catch (error) {
+		throw new Error(error.response?.data?.error || 'Error al verificar el email');
 	}
 }

@@ -1,9 +1,16 @@
 <script>
+	import { browser } from '$app/environment';
   import { authStore } from '$lib/stores/auth';
+	import { onMount } from 'svelte';
 
+  onMount(()=>{
+    if(browser && $authStore){
+      console.log($authStore);
+    }
+  })
 </script>
 
-<main>
+<main class="mt-32 p-4">
     <h1>Dashboard Page</h1>
     {#if $authStore}
     <h2>Bienvenido, {$authStore.email}</h2>

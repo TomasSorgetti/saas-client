@@ -3,6 +3,7 @@
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { authStore, fetchUserProfile } from '$lib/stores/auth';
+  import Appbar from "$lib/components/navigation/Appbar.svelte";
 
   let loading = true;
 
@@ -35,5 +36,6 @@
     <p>Cargando...</p>
   </div>
 {:else}
+  <Appbar/>
   <slot />
 {/if}

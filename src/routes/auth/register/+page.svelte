@@ -1,7 +1,9 @@
 <script>
-    import { enhance } from '$app/forms';
     import FormButton from '$lib/components/buttons/FormButton.svelte';
     import GoogleButton from '$lib/components/buttons/GoogleButton.svelte';
+    import { PUBLIC_API_URL } from '$env/static/public';
+	import { goto } from '$app/navigation';
+	import { register } from '$lib/api/auth';
 
     let stage = 1;
     let formData = {
@@ -24,10 +26,12 @@
         address: '',
         country: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        general: ''
     };
     let isCheckingEmail = false;
     let emailVerified = false;
+    let isSubmitting = false;
 
     function validateField(field) {
         let isValid = true;
@@ -71,8 +75,8 @@
             case 'password':
                 errors = { ...errors, password: !formData.password
                     ? 'La contraseña es obligatoria'
-                    : formData.password.length < 6
-                        ? 'Mínimo 6 caracteres'
+                    : formData.password.length < 5
+                        ? 'Mínimo 5 caracteres'
                         : '' };
                 isValid = !errors.password;
                 break;
@@ -117,34 +121,23 @@
         }
 
         isCheckingEmail = true;
-        errors = { ...errors, email: '' };
+        errors = { ...errors, email: '', general: '' };
 
         try {
-            const response = await fetch('/auth/register?/checkEmail', {
+            const response = await fetch(`${PUBLIC_API_URL}/auth/check-email`, {
                 method: 'POST',
-                body: new FormData(document.querySelector('#register-form')),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: formData.email })
             });
 
             const result = await response.json();
 
             isCheckingEmail = false;
 
-            if (result.type === 'failure' || !response.ok) {
-                let errorMessage = 'Error al verificar el email';
-                if (typeof result.data === 'string') {
-                    try {
-                        const parsedData = JSON.parse(result.data);
-                        errorMessage = parsedData.errors?.email || parsedData[2] || errorMessage;
-                    } catch (e) {
-                        console.error('Error al parsear result.data:', e);
-                        errorMessage = result.data.includes('El email ya está registrado') 
-                            ? 'El email ya está registrado' 
-                            : errorMessage;
-                    }
-                } else {
-                    errorMessage = result.errors?.email || result.data?.errors?.email || errorMessage;
-                }
-                errors = { ...errors, email: errorMessage };
+            if (!response.ok || result.exists) {
+                errors = { ...errors, email: result.errors?.email || 'El email ya está registrado' };
                 return false;
             }
 
@@ -152,12 +145,14 @@
             return true;
         } catch (error) {
             isCheckingEmail = false;
-            errors = { ...errors, email: 'Error de conexión al verificar el email' };
+            errors = { ...errors, email: 'Error de conexión al verificar el email', general: '' };
             return false;
         }
     }
 
     async function nextStage() {
+        console.log(formData);
+        
         if (stage === 1) {
             if (!validateStep()) {
                 return;
@@ -181,19 +176,51 @@
         }
     }
 
-    function handleSubmit({ form, action, result }) {
-        if (result.type === 'failure') {
-            errors = { ...errors, ...result.data?.errors };
-            formData = { ...formData, ...result.data?.formData };
+    async function handleRegister() {
+        if (!validateStep()) {
+            return;
+        }
+
+        validateField('email');
+        validateField('firstName');
+        validateField('lastname');
+        validateField('workshopName');
+        validateField('phone');
+        validateField('address');
+        validateField('country');
+        validateField('password');
+        validateField('confirmPassword');
+
+        if (Object.values(errors).some(error => error)) {
+            return;
+        }
+
+        if (!emailVerified) {
+            errors = { ...errors, email: 'Por favor verifica el email primero' };
+            return;
+        }
+
+        isSubmitting = true;
+        errors = { ...errors, general: '' };
+
+        try {
+            const response = await register(formData)
+
+            goto(`/auth/verify?expiresAt=${response.verificationCodeExpiresAt}&token=${response.verificationToken}`)
+        } catch (error) {
+            errors = { ...errors, general: 'Error de conexión al registrar el usuario' };
+            isSubmitting = false;
         }
     }
 </script>
 
-<main class="flex flex-col items-center justify-center h-screen bg-gray-100">
+<main class="flex flex-col items-center justify-center h-screen">
     <p>Luthier <span>Stock</span></p>
     <h1 class="text-5xl font-bold mb-12">Registrarse</h1>
-    <form id="register-form" action="/auth/register?/register" method="POST" class="flex flex-col gap-0 w-full max-w-[400px]" use:enhance={handleSubmit}>
-        <input type="hidden" name="emailVerified" value={emailVerified ? 'true' : 'false'} />
+    {#if errors.general}
+        <span class="text-red-500 text-xs mb-4">{errors.general}</span>
+    {/if}
+    <form id="register-form" class="flex flex-col gap-0 w-full max-w-[400px]">
         {#if stage === 1}
             <GoogleButton />
             <label for="email" class="flex flex-col gap-1 relative mt-4">
@@ -349,7 +376,9 @@
                 {/if}
             </label>
             <div class="flex flex-col gap-4 mt-4">
-                <FormButton type="submit" primary>Registrarse</FormButton>
+                <FormButton type="button" onClick={handleRegister} primary disabled={isSubmitting}>
+                    {isSubmitting ? 'Registrando...' : 'Registrarse'}
+                </FormButton>
                 <FormButton type="button" onClick={prevStage} secondary>Volver</FormButton>
             </div>
         {/if}

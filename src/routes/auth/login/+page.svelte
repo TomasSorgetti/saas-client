@@ -12,8 +12,12 @@
   async function handleLogin(event) {
     event.preventDefault();
     try {
-      await loginUser(email, password, remember);
-      goto('/private/dashboard');
+      const response = await loginUser(email, password, remember);
+      if(response.verificationRequired){
+          goto(`/auth/verify?expiresAt=${response.verificationCodeExpiresAt}&token=${response.verificationToken}`);
+      }else{
+          goto('/private/dashboard');
+        }
     } catch (err) {
       error = err.message;
       console.error('Error al iniciar sesión:', err.message);
@@ -21,7 +25,7 @@
   }
 </script>
 
-<main class="flex flex-col items-center justify-center h-screen bg-gray-100">
+<main class="flex flex-col items-center justify-center h-screen">
     <p>Luthier <span>Stock</span></p>
     <h1 class="text-5xl font-bold mb-12 text-red-gray">Iniciar Sesión</h1>
     <form on:submit={handleLogin} class="flex flex-col gap-4 w-full max-w-[400px]">

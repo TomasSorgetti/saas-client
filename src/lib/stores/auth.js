@@ -11,13 +11,18 @@ export const authStore = writable(
 
 export async function loginUser(email, password, remember) {
 	try {
-		const profile = await login(email, password, remember);
-		authStore.set(profile);
+		const response = await login(email, password, remember);
+
+		if (response.verificationRequired) {
+			return response;
+		}
+
+		authStore.set(response);
 		if (browser) {
 			localStorage.setItem('isAuthenticated', 'true');
-			localStorage.setItem('user', JSON.stringify(profile));
+			localStorage.setItem('user', JSON.stringify(response));
 		}
-		return profile;
+		return response;
 	} catch (error) {
 		authStore.set(null);
 		if (browser) {
