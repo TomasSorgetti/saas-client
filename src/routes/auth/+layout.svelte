@@ -32,10 +32,12 @@
 </script>
 
 {#if loading}
-  <div class="flex items-center justify-center h-screen">
+  <div class="flex items-center justify-center h-screen w-screen">
     <p>Cargando...</p>
   </div>
 {:else}
+<div class="w-screen">
   <Appbar/>
   <slot />
+</div>
 {/if}

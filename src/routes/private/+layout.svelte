@@ -4,7 +4,7 @@
 </script>
 
 <Appbar/>
-<div class="flex h-full min-h-screen">
+<div class="flex h-full min-h-screen w-screen">
 	<Sidebar/>
 	<slot />
 </div>

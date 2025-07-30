@@ -2,7 +2,7 @@
     import { authStore } from '$lib/stores/auth';
 
 </script>
-<header class="fixed top-0 left-0 w-full bg-black text-white">
+<header class="fixed top-0 left-0 z-100 w-full bg-black text-white">
     <nav class="container mx-auto w-full flex items-center justify-between py-4">
         <a href="/">Rise AI</a>
         <ul class="flex items-center gap-4">
@@ -21,7 +21,7 @@
                     <a href="/">Inicio</a>
                 </li>
                 <li>
-                    <a href="/auth/register">Try it now</a>
+                    <a href="/auth/register" class="bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] text-white py-3 px-6 cursor-pointer font-bold rounded">Try it now</a>
                 </li>
             {/if}
         </ul>
