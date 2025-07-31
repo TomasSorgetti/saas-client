@@ -98,3 +98,18 @@ export async function resendEmailCode(token) {
 		throw new Error(error.response?.data?.error || 'Error al verificar el email');
 	}
 }
+
+export async function checkEmailInDb(email) {
+	try {
+		const response = await publicApi.post('/auth/check-email', {
+			email
+		});
+
+		return response.data;
+	} catch (error) {
+		if (error.status === 429) {
+			throw new Error('Demasiados intentos.');
+		}
+		throw new Error(error.response?.data?.error || 'Error al checkear el email');
+	}
+}

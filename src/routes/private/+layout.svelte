@@ -4,7 +4,7 @@
 </script>
 
 <Appbar/>
-<div class="flex h-full min-h-screen w-screen">
+<div class="flex h-full min-h-screen w-screen items-start justify-start">
 	<Sidebar/>
 	<slot />
 </div>

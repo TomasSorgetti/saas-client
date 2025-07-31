@@ -3,7 +3,7 @@
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { authStore, fetchUserProfile } from '$lib/stores/auth';
-  import Appbar from "$lib/components/navigation/Appbar.svelte";
+	import Navbar from '$lib/components/navigation/Navbar.svelte';
 
   let loading = true;
 
@@ -37,7 +37,7 @@
   </div>
 {:else}
 <div class="w-screen">
-  <Appbar/>
+  <Navbar/>
   <slot />
 </div>
 {/if}

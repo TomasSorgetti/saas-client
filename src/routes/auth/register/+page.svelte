@@ -3,7 +3,7 @@
     import GoogleButton from '$lib/components/buttons/GoogleButton.svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
 	import { goto } from '$app/navigation';
-	import { register } from '$lib/api/auth';
+	import { checkEmailInDb, register } from '$lib/api/auth';
 
     let stage = 1;
     let formData = {
@@ -123,20 +123,12 @@
         isCheckingEmail = true;
         errors = { ...errors, email: '', general: '' };
 
-        try {
-            const response = await fetch(`${PUBLIC_API_URL}/auth/check-email`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: formData.email })
-            });
-
-            const result = await response.json();
+        try {            
+            const result = await checkEmailInDb(formData.email)
 
             isCheckingEmail = false;
 
-            if (!response.ok || result.exists) {
+            if (result.exists) {
                 errors = { ...errors, email: result.errors?.email || 'El email ya está registrado' };
                 return false;
             }
@@ -145,14 +137,12 @@
             return true;
         } catch (error) {
             isCheckingEmail = false;
-            errors = { ...errors, email: 'Error de conexión al verificar el email', general: '' };
+            errors = { ...errors, email: error.message, general: '' };
             return false;
         }
     }
 
     async function nextStage() {
-        console.log(formData);
-        
         if (stage === 1) {
             if (!validateStep()) {
                 return;
@@ -276,7 +266,7 @@
             >
                 {isCheckingEmail ? 'Verificando...' : 'Siguiente'}
             </FormButton>
-            <p class="text-center mt-2 text-medium-gray">¿Ya tienes cuenta? <a href="/auth/login" class="font-bold underline text-black">Iniciar sesión</a></p>
+            <p class="text-center mt-2 text-medium-gray">¿Ya tienes cuenta? <a href="/auth/login" class="font-bold underline text-black hover:text-primary">Iniciar sesión</a></p>
         {/if}
         {#if stage === 2}
             <label for="workshopName" class="flex flex-col gap-1 relative">

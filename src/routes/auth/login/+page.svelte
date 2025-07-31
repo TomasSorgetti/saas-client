@@ -28,7 +28,7 @@
 <main class="flex flex-col items-center justify-center h-screen">
     <p>Luthier <span>Stock</span></p>
     <h1 class="text-5xl font-bold mb-12 text-red-gray">Iniciar Sesión</h1>
-    <form on:submit={handleLogin} class="flex flex-col gap-4 w-full max-w-[400px]">
+    <form on:submit={handleLogin} autocomplete="on" class="flex flex-col gap-4 w-full max-w-[400px]">
         {#if error}
             <p class="text-red-500 font-bold">{error}</p>
         {/if}

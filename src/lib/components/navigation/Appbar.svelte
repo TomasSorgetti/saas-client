@@ -27,9 +27,10 @@
             <li>
                 {#if $authStore}
                     <button onclick={handleLogout} class="cursor-pointer">logout</button>
-                {:else}
-                    <a href="/auth/register" class="bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] text-white py-2 px-6 font-bold rounded">Try it free</a>
                 {/if}
+            </li>
+            <li>
+                <a href="/private/account/billing" class="bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] text-white py-3 px-6 font-bold rounded">Upgrade plan</a>
             </li>
         </ul>
     </nav>
