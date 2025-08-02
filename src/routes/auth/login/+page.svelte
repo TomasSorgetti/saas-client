@@ -20,7 +20,6 @@
         }
     } catch (err) {
       error = err.message;
-      console.error('Error al iniciar sesión:', err.message);
     }
   }
 </script>

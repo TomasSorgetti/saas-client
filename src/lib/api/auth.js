@@ -8,8 +8,14 @@ export async function login(email, password, remember = false) {
 			password,
 			remember
 		});
+		console.log('Response', response);
+
 		return response.data;
 	} catch (error) {
+		console.log('Error', error);
+		if (error.response?.status === 429) {
+			throw new Error('Demasiados intentos, prueba más tarde.');
+		}
 		throw new Error(error.response?.data?.error || 'Error al iniciar sesión');
 	}
 }
@@ -28,7 +34,9 @@ export async function register(formData) {
 
 		return response.data;
 	} catch (error) {
-		console.log('Error: ', error);
+		if (error.response?.status === 429) {
+			throw new Error('Demasiados intentos, prueba más tarde.');
+		}
 		throw new Error(error.response?.data?.error || 'Error al iniciar sesión');
 	}
 }
@@ -48,6 +56,8 @@ export async function fetchProfile() {
 			);
 		} else if (status === 404) {
 			throw new Error('Usuario no encontrado.');
+		} else if (status === 429) {
+			throw new Error('Demasiados intentos, prueba más tarde.');
 		}
 		throw new Error(message);
 	}
@@ -58,6 +68,9 @@ export async function logout() {
 		const response = await publicApi.post('/auth/logout');
 		return response.data;
 	} catch (error) {
+		if (error.response?.status === 429) {
+			throw new Error('Demasiados intentos, prueba más tarde.');
+		}
 		throw new Error(error.response?.data?.error || 'Error al cerrar sesión');
 	}
 }
@@ -67,6 +80,9 @@ export async function refresh() {
 		const response = await publicApi.post('/auth/refresh');
 		return response.data;
 	} catch (error) {
+		if (error.response?.status === 429) {
+			throw new Error('Demasiados intentos, prueba más tarde.');
+		}
 		throw new Error(error.response?.data?.error || 'Error al refrescar el token');
 	}
 }
@@ -91,10 +107,12 @@ export async function resendEmailCode(token) {
 		const response = await publicApi.post('/auth/resend-code', {
 			verification_token: token
 		});
-		console.log('Fetch ', response);
 
 		return response.data;
 	} catch (error) {
+		if (error.response?.status === 429) {
+			throw new Error('Demasiados intentos, prueba más tarde.');
+		}
 		throw new Error(error.response?.data?.error || 'Error al verificar el email');
 	}
 }
@@ -107,8 +125,8 @@ export async function checkEmailInDb(email) {
 
 		return response.data;
 	} catch (error) {
-		if (error.status === 429) {
-			throw new Error('Demasiados intentos.');
+		if (error.response?.status === 429) {
+			throw new Error('Demasiados intentos, prueba más tarde.');
 		}
 		throw new Error(error.response?.data?.error || 'Error al checkear el email');
 	}
