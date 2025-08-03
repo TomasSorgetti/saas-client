@@ -11,8 +11,8 @@
             <span class="text-5xl text-white font-bold">Suscripción {planName}</span>
         </div>
         <p class="text-white max-w-[500px]">{description}</p>
-        <a href="/private/account/plans" class="bg-white text-black rounded-md font-bold flex items-center gap-4 pr-14 text-[18px]">
-            <img src="/star_button.svg" alt="star icon" class="h-full w-auto">
+        <a href="/private/account/plans" class="bg-white text-black rounded-md font-bold flex items-center gap-4 pr-14 text-[18px] hover:shadow-2xl group">
+            <img src="/star_button.svg" alt="star icon" class="h-full w-auto group-hover:translate-y-[-2px] transition-all duration-300">
             Mejorar plan
         </a>
     </div>

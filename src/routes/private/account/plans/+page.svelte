@@ -2,7 +2,6 @@
 
 </script>
 
-<main class="w-full min-h-screen mt-32 pl-16 flex flex-col items-start">
     <h1 class="text-5xl font-bold">Selecciona el plan</h1>
     <div class="w-full  max-w-[700px]">
         <ul class="mt-16 flex flex-col gap-8 items-start w-full">
@@ -64,4 +63,3 @@
             <button class="bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] text-white py-3 px-6 font-bold rounded cursor-pointer">Siguiente</button>
         </div>
     </div>
-</main>

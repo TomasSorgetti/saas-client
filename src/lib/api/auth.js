@@ -66,8 +66,12 @@ export async function fetchProfile() {
 export async function logout() {
 	try {
 		const response = await publicApi.post('/auth/logout');
+		console.log('Response: ', response);
+
 		return response.data;
 	} catch (error) {
+		console.log(error.message, error);
+
 		if (error.response?.status === 429) {
 			throw new Error('Demasiados intentos, prueba más tarde.');
 		}
