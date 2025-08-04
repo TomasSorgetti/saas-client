@@ -112,7 +112,7 @@
                     </svg>
                 </button>
                 <ul
-                    class="flex-col gap-2 mt-2 md:mt-0 pl-4 md:pl-0 lg:absolute lg:right-0 lg:top-full md:bg-white md:shadow-2xl md:rounded md:p-4 md:min-w-[120px] {isAccountOpen ? 'flex' : 'hidden'} md:hidden md:group-hover:flex lg:p-4"
+                    class="flex-col gap-2 mt-2 md:mt-0 pl-4 md:pl-0 lg:absolute lg:right-0 lg:top-full md:bg-white md:shadow-2xl md:rounded md:p-4 md:min-w-[200px] {isAccountOpen ? 'flex' : 'hidden'} md:hidden md:group-hover:flex lg:p-4"
                     style="md:margin-top: -2px;"
                     transition:fade={{ duration: 200 }}
                 >
@@ -121,6 +121,9 @@
                     </li>
                     <li>
                         <a href="/private/account/billing" class="hover:text-gray-600" onclick={handleCloseMenu}>Billing</a>
+                    </li>
+                    <li>
+                        <a href="/private/account/security" class="hover:text-gray-600" onclick={handleCloseMenu}>Password & Security</a>
                     </li>
                     <li>
                         <button
