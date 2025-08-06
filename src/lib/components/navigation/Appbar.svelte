@@ -5,7 +5,7 @@
     import { fade } from 'svelte/transition';
 
     let isMobileMenuOpen = false;
-    let isAccountOpen = false; // For mobile account toggle
+    let isAccountOpen = false; 
 
     async function handleLogout() {
         try {
@@ -42,7 +42,9 @@
         <!-- Logo and Plan -->
         <div class="flex items-center gap-2">
             <a href="/" class="text-3xl font-bold">Rise AI</a>
-            {#if $authStore.subscription.plan_name}
+            {#if $authStore === null}
+                <p class="px-2 py-0.5 font-bold text-[12px] text-white bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] rounded-full">Free Tier</p>
+            {:else if $authStore && $authStore.subscription && $authStore.subscription.plan_name}
                 <a
                     href="/private/account/plans"
                     class="px-2 py-0.5 font-bold text-[12px] text-white bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] rounded-full"

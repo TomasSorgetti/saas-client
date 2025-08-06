@@ -53,7 +53,7 @@ export async function fetchUserProfile() {
 
 export async function logoutUser() {
 	try {
-		await logout(); // Llama a la API de logout
+		await logout();
 		authStore.set(null);
 		if (browser) {
 			localStorage.removeItem('isAuthenticated');
