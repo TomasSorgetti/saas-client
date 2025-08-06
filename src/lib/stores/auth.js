@@ -1,6 +1,5 @@
-// lib/stores/auth.js
 import { writable } from 'svelte/store';
-import { browser } from '$app/environment'; // Importar browser para detectar el entorno
+import { browser } from '$app/environment';
 import { login, fetchProfile, logout, refresh } from '$lib/api/auth';
 
 export const authStore = writable(
@@ -54,19 +53,15 @@ export async function fetchUserProfile() {
 
 export async function logoutUser() {
 	try {
-		await logout();
+		await logout(); // Llama a la API de logout
 		authStore.set(null);
 		if (browser) {
 			localStorage.removeItem('isAuthenticated');
 			localStorage.removeItem('user');
 		}
 	} catch (error) {
-		authStore.set(null);
-		if (browser) {
-			localStorage.removeItem('isAuthenticated');
-			localStorage.removeItem('user');
-		}
-		throw error;
+		console.error('Error logging out:', error);
+		throw new Error(error.response?.data?.error || 'Error al cerrar sesión');
 	}
 }
 

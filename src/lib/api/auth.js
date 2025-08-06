@@ -1,4 +1,3 @@
-// lib/api/auth.js
 import { publicApi, authApi } from './index';
 
 export async function login(email, password, remember = false) {
@@ -19,6 +18,7 @@ export async function login(email, password, remember = false) {
 		throw new Error(error.response?.data?.error || 'Error al iniciar sesión');
 	}
 }
+
 export async function register(formData) {
 	try {
 		const response = await publicApi.post('/auth/signup', {
