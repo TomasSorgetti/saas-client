@@ -43,11 +43,11 @@
         <div class="flex items-center gap-2">
             <a href="/" class="text-3xl font-bold">Rise AI</a>
             {#if $authStore === null}
-                <p class="px-2 py-0.5 font-bold text-[12px] text-white bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] rounded-full">Free Tier</p>
+                <p class="px-2 py-0.5 font-bold text-[12px] text-white bg-gradient rounded-full">Free Tier</p>
             {:else if $authStore && $authStore.subscription && $authStore.subscription.plan_name}
                 <a
                     href="/private/account/plans"
-                    class="px-2 py-0.5 font-bold text-[12px] text-white bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] rounded-full"
+                    class="px-2 py-0.5 font-bold text-[12px] text-white bg-gradient rounded-full"
                     onclick={handleCloseMenu}
                 >
                     {$authStore.subscription.plan_name}

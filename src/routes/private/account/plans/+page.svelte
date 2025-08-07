@@ -60,6 +60,6 @@
         </ul>
         <div class="w-full flex items-center justify-end gap-12 mt-12">
             <p>Plan seleccionado: <span class="font-bold">Premium Plan</span></p>
-            <button class="bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] text-white py-3 px-6 font-bold rounded cursor-pointer">Siguiente</button>
+            <button class="bg-gradient text-white py-3 px-6 font-bold rounded cursor-pointer">Siguiente</button>
         </div>
     </div>

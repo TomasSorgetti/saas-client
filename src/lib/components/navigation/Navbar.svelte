@@ -14,14 +14,14 @@
             </li>
             {#if $authStore}
                 <li>
-                    <a href="/private/dashboard" class="bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] text-white py-2 px-6 font-bold rounded">Go to app</a>
+                    <a href="/private/dashboard" class="bg-gradient text-white py-2 px-6 font-bold rounded">Go to app</a>
                 </li>
             {:else}
                 <li>
                     <a href="/">Inicio</a>
                 </li>
                 <li>
-                    <a href="/auth/register" class="bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] text-white py-3 px-6 cursor-pointer font-bold rounded">Try it now</a>
+                    <a href="/auth/register" class="bg-gradient text-white py-3 px-6 cursor-pointer font-bold rounded">Try it now</a>
                 </li>
             {/if}
         </ul>

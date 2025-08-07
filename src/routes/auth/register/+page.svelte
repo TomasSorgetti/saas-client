@@ -1,9 +1,10 @@
+<!-- src/routes/auth/register/+page.svelte -->
 <script>
+    import { goto } from '$app/navigation';
+    import { page } from '$app/stores'; 
     import FormButton from '$lib/components/buttons/FormButton.svelte';
     import GoogleButton from '$lib/components/buttons/GoogleButton.svelte';
-    import { PUBLIC_API_URL } from '$env/static/public';
-	import { goto } from '$app/navigation';
-	import { checkEmailInDb, register } from '$lib/api/auth';
+    import { checkEmailInDb, register } from '$lib/api/auth';
 
     let stage = 1;
     let formData = {
@@ -32,6 +33,24 @@
     let isCheckingEmail = false;
     let emailVerified = false;
     let isSubmitting = false;
+
+    // Leer parámetros de error de la query string
+    $: urlError = $page.url.searchParams.get('error') || null;
+    $: urlMessage = $page.url.searchParams.get('message') || null;
+
+    // Combinar errores de la URL y locales
+    $: displayError = urlMessage || errors.general;
+
+    // Función para limpiar los parámetros de la URL y errores generales
+    function clearError() {
+        errors = { ...errors, general: '' }; // Limpiar error general
+        if (urlError || urlMessage) {
+            const url = new URL(window.location);
+            url.searchParams.delete('error');
+            url.searchParams.delete('message');
+            window.history.replaceState({}, '', url);
+        }
+    }
 
     function validateField(field) {
         let isValid = true;
@@ -124,7 +143,7 @@
         errors = { ...errors, email: '', general: '' };
 
         try {            
-            const result = await checkEmailInDb(formData.email)
+            const result = await checkEmailInDb(formData.email);
 
             isCheckingEmail = false;
 
@@ -194,11 +213,10 @@
         errors = { ...errors, general: '' };
 
         try {
-            const response = await register(formData)
-
-            goto(`/auth/verify?expiresAt=${response.verificationCodeExpiresAt}&token=${response.verificationToken}`)
+            const response = await register(formData);
+            goto(`/auth/verify?expiresAt=${response.verificationCodeExpiresAt}&token=${response.verificationToken}`);
         } catch (error) {
-            errors = { ...errors, general: 'Error de conexión al registrar el usuario' };
+            errors = { ...errors, general: error.message || 'Error de conexión al registrar el usuario' };
             isSubmitting = false;
         }
     }
@@ -207,8 +225,14 @@
 <main class="flex flex-col items-center justify-center h-screen">
     <p>Luthier <span>Stock</span></p>
     <h1 class="text-5xl font-bold mb-12">Registrarse</h1>
-    {#if errors.general}
-        <span class="text-red-500 text-xs mb-4">{errors.general}</span>
+    {#if displayError}
+        <div class="p-4 bg-red-100 text-red-500 font-bold rounded mb-4">
+            <p>{displayError}</p>
+            {#if urlError}
+                <p class="text-sm">Código de error: {urlError}</p>
+            {/if}
+            <button type="button" on:click={clearError} class="mt-2 text-sm underline">Cerrar</button>
+        </div>
     {/if}
     <form id="register-form" class="flex flex-col gap-0 w-full max-w-[400px]">
         {#if stage === 1}

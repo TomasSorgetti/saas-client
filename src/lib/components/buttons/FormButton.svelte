@@ -11,7 +11,7 @@
     on:click={onClick} 
     disabled={disabled}
     class="cursor-pointer transition-all duration-300 hover:shadow-3xl font-bold py-2 px-4 rounded-md h-[48px]
-           {primary ? 'bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] text-white' : ''}
+           {primary ? 'bg-gradient text-white' : ''}
            {secondary ? 'bg-gray-300 text-black' : ''}
            {disabled ? 'opacity-50 cursor-not-allowed' : ''}"
 >

@@ -4,7 +4,7 @@
     export let description = false;
 </script>
 
-<div class="bg-[linear-gradient(90deg,_var(--primary-color),_var(--secondary-color))] rounded-lg w-full flex justify-between items-center">
+<div class="bg-gradient rounded-lg w-full flex justify-between items-center">
     <div class="flex flex-col items-start gap-6 justify-center p-10">
         <div class="flex flex-col items-start">
             <small class="uppercase text-xl text-white tracking-[0.6rem]">{label}</small>

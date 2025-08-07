@@ -35,7 +35,9 @@
 	--shadow-2xl: var(--shadow-2xl);
 	--shadow-xl: var(--shadow-xl);
 }
-
+.bg-gradient {
+	background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+}
 body {
 	display: flex;
 	align-items: flex-start;
